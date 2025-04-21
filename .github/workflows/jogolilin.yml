@@ -27,7 +27,7 @@ jobs:
           echo "WIB Time: $(TZ='Asia/Jakarta' date '+%Y-%m-%d %H:%M:%S')"
           output=$(python indra.py)
           echo "$output"
-          if echo "$output" | grep -q "Pasang nomor"; then
+          if echo "$output" | grep -q "✅"; then
             echo "✅ Workflow sukses"
             exit 0
           else
