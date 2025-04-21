@@ -86,16 +86,19 @@ def run(playwright: Playwright) -> None:
 
         log_status("⏳", "Menunggu konfirmasi dari sistem...")
 
-# Ambil saldo dulu
-        try:
-            saldo = page.locator("#bal-text").inner_text()
-        except Exception as e:
-            saldo = "tidak diketahui"
-            print("⚠️ Gagal ambil saldo:", e)
-
         try:
             page.wait_for_selector("text=Bet Sukses!!", timeout=15000)
 
+            page.get_by_role("link", name="Back to Menu").click()
+            page.reload()
+            time.sleep(2)
+            # Ambil saldo dulu
+            try:
+                saldo = page.locator("#bal-text").inner_text()
+            except Exception as e:
+                saldo = "tidak diketahui"
+                print("⚠️ Gagal ambil saldo:", e)
+            
             pesan_sukses = (
                 "[SUKSES]\n"
                 f"🎯 {jumlah_kombinasi} kombinasi\n"
@@ -107,6 +110,11 @@ def run(playwright: Playwright) -> None:
             kirim_telegram_log("SUKSES", pesan_sukses)
         except:
             log_status("❌", "Gagal: Teks 'Bet Sukses!!' tidak ditemukan.")
+            try:
+                saldo = page.locator("#bal-text").inner_text()
+            except Exception as e:
+                saldo = "tidak diketahui"
+                print("⚠️ Gagal ambil saldo:", e)
             kirim_telegram_log("GAGAL", f"[GAGAL]\n❌💰 Rp. {saldo}\n⌚ {wib}")
 
 
